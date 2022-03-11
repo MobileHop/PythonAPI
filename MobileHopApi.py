@@ -16,7 +16,7 @@ class MobileHopApi:
 		self.sess = requests.Session()
 
 	def login(self):
-		data = f'username={self.username}&password={self.password}'
+		data = 'username=%s&password=%s' % (self.username, self.password)
 		resp = self.sess.post(self.LOGIN_URL, headers=self.headers, data=data, verify=False)
 		if resp.status_code != 200:
 			return False
@@ -39,7 +39,7 @@ class MobileHopApi:
 		return resp['result']
 
 	def connect_proxy(self, proxyUuid, location):
-		resp = self.api_request('connect', f'{proxyUuid}/{location}')
+		resp = self.api_request('connect', '%s/%s' % (proxyUuid,location))
 		if resp == None:
 			return json.dumps({'error': 'not logged in'})
 		return resp['result']
@@ -70,7 +70,7 @@ class MobileHopApi:
 		return resp['result']
 
 	def set_whitelist_ip(self, proxyUuid, cidr_ip):
-		resp = self.api_request('ipwhitelist', f'{proxyUuid}/{cidr_ip}')
+		resp = self.api_request('ipwhitelist', '%s/%s' % (proxyUuid, cidr_ip))
 		if resp == None:
 			return json.dumps({'error': 'not logged in'})
 		return resp['result']
